@@ -1,0 +1,312 @@
+/* Meet Halfway: "Kuwait night out"
+   A night map of Kuwait, a sand-colored panel, and three colors that mean
+   something: teal = you, rose = your friend, gold = where you meet. */
+
+:root {
+  --night: #0f1b2d;     /* map + ink */
+  --sand: #f4ecdc;      /* panel */
+  --sand-deep: #e8dcc4; /* inputs, dividers */
+  --ink: #1a2436;
+  --ink-soft: #5d6678;
+  --a: #1ba39a;         /* you */
+  --b: #d9406f;         /* your friend */
+  --mid: #e6a92a;       /* the meeting point */
+  --focus: #2b62d9;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  font-family: "Readex Pro", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--night);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Layout: the map is the whole screen, the panel floats on it ---------- */
+.app { position: relative; height: 100vh; height: 100dvh; }
+
+#map {
+  position: absolute;
+  inset: 0;
+  background: var(--night);
+}
+
+.panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  width: 400px;
+  z-index: 500;
+  background: var(--sand);
+  border-radius: 22px;
+  padding: 28px 26px 18px;
+  overflow-y: auto;
+  box-shadow: 0 30px 60px rgba(4, 10, 20, 0.45);
+  scrollbar-width: thin;
+}
+
+/* ---------- Brand ---------- */
+.logo { width: 64px; height: 28px; color: var(--ink-soft); display: block; }
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 14px 0 10px;
+}
+
+.tagline {
+  margin: 0 0 26px;
+  color: var(--ink-soft);
+  font-weight: 300;
+  line-height: 1.55;
+  max-width: 32ch;
+}
+
+/* ---------- The route: two stops joined by a dashed line ---------- */
+.route { position: relative; }
+
+.route::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 30px;
+  bottom: 30px;
+  border-left: 2px dashed #c7b89a;
+}
+
+.stop { display: flex; gap: 14px; position: relative; }
+
+.pin {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  border: 5px solid var(--a);
+  background: var(--sand);
+}
+.stop-b .pin { border-color: var(--b); }
+
+.stop-body { flex: 1; min-width: 0; }
+
+.stop-name { display: block; font-weight: 600; margin-bottom: 8px; }
+.stop-a .stop-name { color: var(--a); }
+.stop-b .stop-name { color: var(--b); }
+
+.selects { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+select {
+  width: 100%;
+  appearance: none;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--sand-deep) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235d6678' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 11px 30px 11px 12px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+select:disabled { opacity: 0.45; cursor: not-allowed; }
+select:hover:not(:disabled) { border-color: #d3c4a6; }
+
+.swap {
+  display: block;
+  margin: 10px 0 10px 44px;
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: var(--sand);
+  cursor: pointer;
+}
+.swap svg { width: 100%; height: 100%; display: block; }
+.swap.spin svg { transition: transform 0.35s ease; transform: rotate(180deg); }
+
+/* ---------- Type of place ---------- */
+.types { border: none; padding: 0; margin: 26px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.types legend, .radius label { font-weight: 600; margin-bottom: 10px; padding: 0; }
+.types input { position: absolute; opacity: 0; pointer-events: none; }
+.types span {
+  display: inline-block;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--sand-deep);
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+.types input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--sand); }
+
+/* ---------- Radius ---------- */
+.radius {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+}
+.radius output { font-weight: 600; color: var(--ink-soft); }
+.radius input { grid-column: 1 / -1; width: 100%; accent-color: var(--ink); margin: 4px 0 0; }
+
+/* ---------- Main button ---------- */
+.go {
+  width: 100%;
+  margin-top: 26px;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--sand);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.go::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--a) 0 33%, var(--mid) 33% 66%, var(--b) 66%);
+}
+.go:hover { background: #24314a; }
+.go:disabled { cursor: progress; }
+.go.loading::after { animation: travel 1.1s linear infinite; background-size: 200% 100%; }
+@keyframes travel { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+#status { margin: 12px 0 0; min-height: 1.3em; font-size: 0.92rem; color: var(--ink-soft); }
+#status.error { color: #b3261e; font-weight: 500; }
+
+/* ---------- Results ---------- */
+.results { margin-top: 18px; border-top: 2px solid var(--sand-deep); padding-top: 20px; }
+
+.summary { margin-bottom: 16px; }
+.summary .big { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin: 0 0 6px; }
+.summary p { margin: 0; color: var(--ink-soft); line-height: 1.5; }
+
+.places { list-style: none; margin: 0; padding: 0; counter-reset: place; }
+
+.place {
+  counter-increment: place;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 4px 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--sand-deep);
+}
+.place::before {
+  content: counter(place);
+  grid-row: span 3;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--sand-deep);
+}
+.place.top::before { background: var(--mid); color: var(--ink); }
+
+.place-name {
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+  cursor: pointer;
+}
+.place-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Balance bar: how much of the trip each person drives */
+.balance { display: flex; height: 6px; border-radius: 999px; overflow: hidden; margin: 6px 0 4px; }
+.balance .ba { background: var(--a); }
+.balance .bb { background: var(--b); flex: 1; }
+
+.place-meta { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--ink-soft); }
+.place-meta .ka { color: var(--a); font-weight: 600; }
+.place-meta .kb { color: var(--b); font-weight: 600; }
+.place-meta a { color: var(--ink); font-weight: 500; }
+.place-meta .links { display: flex; gap: 12px; }
+
+.credits { margin-top: 22px; font-size: 0.75rem; color: var(--ink-soft); }
+.credits a { color: inherit; }
+
+/* ---------- Map markers ---------- */
+.mk-home {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 6px solid currentColor; background: var(--sand);
+  box-shadow: 0 0 0 4px rgba(244, 236, 220, 0.25);
+}
+
+.mk-mid { position: relative; width: 26px; height: 26px; }
+.mk-mid .core {
+  position: absolute; inset: 4px; border-radius: 50%;
+  background: var(--mid); border: 3px solid var(--sand);
+}
+.mk-mid .ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--mid);
+  animation: ripple 2s ease-out infinite;
+}
+@keyframes ripple { from { transform: scale(1); opacity: 0.9; } to { transform: scale(3.2); opacity: 0; } }
+
+.mk-place {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--sand); display: grid; place-items: center;
+  font-size: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.mk-place.top { outline: 3px solid var(--mid); }
+
+.mk-label {
+  background: var(--sand); color: var(--ink);
+  font: 600 12px "Readex Pro", sans-serif;
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -150%);
+  display: inline-block;
+}
+
+.leaflet-popup-content-wrapper { border-radius: 14px; font-family: "Readex Pro", sans-serif; }
+.leaflet-container a.leaflet-popup-close-button { color: var(--ink-soft); }
+
+/* ---------- Focus and motion ---------- */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Phone: map on top, panel below ---------- */
+@media (max-width: 760px) {
+  .app { height: auto; }
+  #map { position: relative; height: 46vh; }
+  .panel {
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin-top: -22px;
+    border-radius: 22px 22px 0 0;
+    padding: 24px 18px 20px;
+    overflow: visible;
+    box-shadow: none;
+  }
+  h1 { font-size: 2rem; }
+}
+
+@media (max-width: 380px) {
+  .selects { grid-template-columns: 1fr; }
+}

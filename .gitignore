@@ -1,0 +1,3 @@
+# Private keys, never upload
+config.js
+.env

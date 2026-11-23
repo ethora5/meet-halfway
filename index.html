@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet Halfway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <div id="map" aria-label="Map"></div>
+
+    <aside class="panel">
+      <header class="brand">
+        <svg class="logo" viewBox="0 0 64 28" aria-hidden="true">
+          <path d="M6 22 Q32 -6 58 22" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 4"/>
+          <circle cx="6" cy="22" r="5" fill="var(--a)"/>
+          <circle cx="58" cy="22" r="5" fill="var(--b)"/>
+          <circle cx="32" cy="8" r="6" fill="var(--mid)"/>
+        </svg>
+        <h1>Meet Halfway</h1>
+        <p class="tagline">Two homes, one fair place to meet. Pick both areas and we'll find the spot in the middle.</p>
+      </header>
+
+      <form id="search-form" novalidate>
+        <div class="route">
+          <div class="stop stop-a">
+            <span class="pin" aria-hidden="true"></span>
+            <div class="stop-body">
+              <span class="stop-name">You</span>
+              <div class="selects">
+                <select id="gov-a" class="gov" data-person="a" aria-label="Your governorate">
+                  <option value="">Governorate</option>
+                </select>
+                <select id="area-a" class="area" aria-label="Your area" disabled>
+                  <option value="">Area</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="swap-btn" class="swap" aria-label="Swap the two areas">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v14M7 18l-3-3M7 18l3-3M17 20V6M17 6l-3 3M17 6l3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="stop stop-b">
+            <span class="pin" aria-hidden="true"></span>
+            <div class="stop-body">
+              <span class="stop-name">Your friend</span>
+              <div class="selects">
+                <select id="gov-b" class="gov" data-person="b" aria-label="Friend's governorate">
+                  <option value="">Governorate</option>
+                </select>
+                <select id="area-b" class="area" aria-label="Friend's area" disabled>
+                  <option value="">Area</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="types">
+          <legend>What are you in the mood for?</legend>
+          <label><input type="radio" name="type" value="cafe" checked><span>☕ Coffee</span></label>
+          <label><input type="radio" name="type" value="restaurant"><span>🍽️ Dinner</span></label>
+          <label><input type="radio" name="type" value="fast_food"><span>🍔 Quick bite</span></label>
+          <label><input type="radio" name="type" value="ice_cream"><span>🍦 Dessert</span></label>
+        </fieldset>
+
+        <div class="radius">
+          <label for="radius">How far from the middle</label>
+          <output id="radius-value" for="radius">2 km</output>
+          <input type="range" id="radius" min="1000" max="5000" step="500" value="2000">
+        </div>
+
+        <button type="submit" id="go-btn" class="go">
+          <span class="go-text">Find our spot</span>
+        </button>
+        <p id="status" role="status" aria-live="polite"></p>
+      </form>
+
+      <section id="results" class="results" hidden>
+        <div class="summary" id="summary"></div>
+        <ol id="results-list" class="places"></ol>
+      </section>
+
+      <footer class="credits">
+        Map © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> (backup © <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a>),
+        data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
+      </footer>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="config.js"></script>
+  <script src="areas.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
