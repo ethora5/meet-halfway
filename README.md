@@ -62,7 +62,9 @@ python -m http.server 8000
 * Support more than two people (group midpoint)
 
 ## Screenshot
-_Add a screenshot here_
+<img width="1902" height="865" alt="image" src="https://github.com/user-attachments/assets/74f03e3b-ede7-4df1-ab97-9a6fc6d07dbc" />
+<img width="1897" height="772" alt="Screenshot 2026-11-23 173721" src="https://github.com/user-attachments/assets/dcea1c79-4fa0-4079-95ae-94134a844440" />
+
 
 ---
 Map data © OpenStreetMap contributors.
